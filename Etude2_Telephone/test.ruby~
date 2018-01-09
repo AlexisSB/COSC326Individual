@@ -1,0 +1,4 @@
+puts "Hello"
+number = gets.chomp
+
+puts number

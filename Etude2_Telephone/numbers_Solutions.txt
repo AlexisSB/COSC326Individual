@@ -1,0 +1,14 @@
+0508 123456     Pass
+0508 1234567    Fail
+0508 123456789  Fail
+0508 1ABCDEFGH  Pass
+0508 4PIPELINE  Pass
+0508 PIPELINE4  Fail
+0508 HELLO1     Pass
+0800 123456     Pass
+0800 1234567    Pass
+0800 1234567AB  Pass
+0900 12345      Pass
+uahrbladhbg     Fail
+%&#%&*$(#**     Fail
+**

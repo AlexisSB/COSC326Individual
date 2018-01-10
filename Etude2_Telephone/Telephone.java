@@ -110,27 +110,28 @@ public class Telephone{
 	    System.out.println("Reject point 1");
             return INVALID_NUMBER;
         }
-	
+          
         int length = input.length();
 	
 	/*Remove Spaces*/
-	input = input.replaceAll("[ ]","");
+	//input = input.replaceAll("[ ]","");
        	
         /* Process numbers starting with 0508*/
-        if(input.matches("\\(?0508\\)?\\w{6}[A-Z]{0,3}")){
-	    input = input.replaceAll("[()]","");
+        if(input.matches("\\(?0508\\)? ?\\w{3} ?\\-?\\w{3}[A-Z]{0,3}")){
+	    input = input.replaceAll("[() ]","");
             //if(input.matches(".{10}[A-Z]{0,3}")){
                 //System.out.println("Check for extra numbers");
                 output[0] = "0508";
-                output[1] = input.substring(4);
+                output[1] = input.substring(4,10);
                 return output;
 		//}else{
 		//return INVALID_NUMBER;
 		//}
         }
-            
+        
+        input = input.replaceAll("[ ]","");  
         /* Processes numbers starting with 0800*/
-        if(input.matches("\\(?0800\\)?\\w{6,9}")){
+        if(input.matches("\\(?0800\\)? ?\\w{3} ?\\-?\\w{3,4}")){
 	    input = input.replaceAll("[()]","");
             //System.out.println("0800 Recognised");
             if(input.matches(".{10,11}[A-Z]{0,3}")){
@@ -142,6 +143,8 @@ public class Telephone{
             }
         }
 
+        
+git
         /* Processes number starting with 0900*/
         if(input.matches("0900\\w{5,9}")){
 	    input = input.replaceAll("[()]","");

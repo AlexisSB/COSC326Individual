@@ -80,7 +80,7 @@ public class Telephone{
           
         /* Process numbers starting with 0508*/
         if(input.matches("\\(?0508\\)? ?\\w{3}[ \\-]?\\w{3}[A-Z]{0,3}")){
-	    input = input.replaceAll("[() ]","");
+	    input = removeAcceptablePunctuation(input);
             //if(input.matches(".{10}[A-Z]{0,3}")){
                 //System.out.println("Check for extra numbers");
                 output[PREFIX] = "0508";
@@ -93,7 +93,7 @@ public class Telephone{
         
         /* Processes numbers starting with 0800*/
         if(input.matches("\\(?0800\\)? ?\\w{3}[ \\-]?\\w{3,6}")){
-	    input = input.replaceAll("[() ]","");
+	    input = removeAcceptablePunctuation(input);
             //System.err.println("0800 check: " + input);
             //System.out.println("0800 Recognised");
             if(input.matches(".{10,11}[A-Z]{0,3}")){

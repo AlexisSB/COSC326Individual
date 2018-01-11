@@ -93,7 +93,8 @@ public class Telephone{
         }
         
         /* Processes numbers starting with 0800*/
-        if(input.matches("\\(?0800\\)? ?\\d{3}[ \\-]?\\d{3,4}")
+        if(input.matches("\\(?0800\\)? ?\\d{3}[ \\-]?\\w{3}[A-Z]{0,3}")
+           || input.matches("\\(?0800\\)? ?\\d{3}[ \\-]?\\w{4}[A-Z]{0,2}")
            || input.matches("\\(?0800\\)? ?\\w{3} ?\\w{3}[A-Z]{0,3}" )
            || input.matches("\\(?0800\\)? ?\\w{3} ?\\w{4}[A-Z]{0,2}" )){
 	    input = removeAcceptablePunctuation(input);

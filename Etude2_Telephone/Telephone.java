@@ -79,7 +79,8 @@ public class Telephone{
         }
           
         /* Process numbers starting with 0508*/
-        if(input.matches("\\(?0508\\)? ?\\w{3}[ \\-]?\\w{3}[A-Z]{0,3}")){
+        if(input.matches("\\(?0508\\)? ?\\d{3}[ \\-]?\\d{3}")
+           ||input.matches ("\\(?0508\\)? ?\\w{3} ?\\w{3}[A-Z]{0,3}")){
 	    input = removeAcceptablePunctuation(input);
             //if(input.matches(".{10}[A-Z]{0,3}")){
                 //System.out.println("Check for extra numbers");
@@ -92,7 +93,9 @@ public class Telephone{
         }
         
         /* Processes numbers starting with 0800*/
-        if(input.matches("\\(?0800\\)? ?\\w{3}[ \\-]?\\w{3,6}")){
+        if(input.matches("\\(?0800\\)? ?\\d{3}[ \\-]?\\d{3,4}")
+           || input.matches("\\(?0800\\)? ?\\w{3} ?\\w{3}[A-Z]{0,3}" )
+           || input.matches("\\(?0800\\)? ?\\w{3} ?\\w{4}[A-Z]{0,2}" )){
 	    input = removeAcceptablePunctuation(input);
             //System.err.println("0800 check: " + input);
             //System.out.println("0800 Recognised");

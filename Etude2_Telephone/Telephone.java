@@ -111,13 +111,13 @@ public class Telephone{
             return INVALID_NUMBER;
         }
           
-        int length = input.length();
+        //int length = input.length();
 	
 	/*Remove Spaces*/
 	//input = input.replaceAll("[ ]","");
        	
         /* Process numbers starting with 0508*/
-        if(input.matches("\\(?0508\\)? ?\\w{3} ?\\-?\\w{3}[A-Z]{0,3}")){
+        if(input.matches("\\(?0508\\)? ?\\w{3}[ \\-]?\\w{3}[A-Z]{0,3}")){
 	    input = input.replaceAll("[() ]","");
             //if(input.matches(".{10}[A-Z]{0,3}")){
                 //System.out.println("Check for extra numbers");
@@ -129,46 +129,49 @@ public class Telephone{
 		//}
         }
         
-        input = input.replaceAll("[ ]","");  
         /* Processes numbers starting with 0800*/
-        if(input.matches("\\(?0800\\)? ?\\w{3} ?\\-?\\w{3,4}")){
-	    input = input.replaceAll("[()]","");
+        if(input.matches("\\(?0800\\)? ?\\w{3}[ \\-]?\\w{3,6}")){
+	    input = input.replaceAll("[() ]","");
+            //System.err.println("0800 check: " + input);
             //System.out.println("0800 Recognised");
             if(input.matches(".{10,11}[A-Z]{0,3}")){
                 output[0] = "0800";
-                output[1] = input.substring(4);
+                if(input.length()==10){
+                    output[1] = input.substring(4,10);
+                }else{
+                    output[1] = input.substring(4,11);
+                }
                 return output;
             }else{
                 return INVALID_NUMBER;
             }
         }
-
         
-git
+       
+       
         /* Processes number starting with 0900*/
-        if(input.matches("0900\\w{5,9}")){
-	    input = input.replaceAll("[()]","");
-            if(input.matches(".{9}[A-Z]{0,4}")){
-                //System.out.println("Check for extra numbers");
-                output[0] = "0900";
-                output[1] = input.substring(4);
-                return output;
-            }else{
-                return INVALID_NUMBER;
-            }
+        if(input.matches("\\(?0900\\)? ?\\w{5}[A-Z]{0,4}")){
+	    input = removeAcceptablePunctuation(input);
+            //System.out.println("Check for extra numbers");
+            output[0] = "0900";
+            output[1] = input.substring(4,9);
+            return output;
         }
+        
 	
         /* Process numbers starting with 02 + 409 for Scott Base*/
-        if(input.matches("\\(?02\\)?409\\-?\\d{4}")){
-	    input = input.replaceAll("[()]","");
+        if(input.matches("\\(?02\\)? ?409[\\- ]?\\d{4}")){
+            input = removeAcceptablePunctuation(input);
+            //System.err.println("02 check: " + input);
             output[0] = "02";
             output[1] = input.substring(2);
             return output;
         }
-
+        
         /* Checks Numbers starting with area codes*/
-        if(input.matches("\\(?0[34679]\\)?[2-9]\\d{2}\\-?\\d{4}")){
-	    input = input.replaceAll("[()\\-]","");
+        if(input.matches("\\(?0[34679]\\)? ?[2-9]\\d{2}[ \\-]?\\d{4}")){
+	    input = removeAcceptablePunctuation(input);
+            //System.err.println("03 check: " + input);
             if(!(input.matches("..900.*|..911.*|..999.*"))){
                 output[0] = input.substring(0,2);
                 output[1] = input.substring(2);
@@ -177,31 +180,36 @@ git
         }
     
         /* Checks mobile numbers starting in 021 */
-        if(input.matches("\\(?021\\)?\\d{3}\\-?\\d{3,4}")
-	   ||input.matches("\\(?021\\)?\\d{4}\\-?\\d{4}")){
-	    input = input.replaceAll("[()\\-]","");
+        if(input.matches("\\(?021\\)? ?\\d{3}[ \\-]?\\d{3,4}")
+	   ||input.matches("\\(?021\\)? ?\\d{4}[\\- ]?\\d{4}")){
+	    input = removeAcceptablePunctuation(input);
             output[0] = "021";
             output[1] = input.substring(3);
             return output;
         }
 
         /* Checks mobile numbers starting in 022 or 027 */
-        if(input.matches("\\(?02[27]\\)?\\d{3}\\-?\\d{4}")){
-	    input = input.replaceAll("[()-]","");
+        if(input.matches("\\(?02[27]\\)? ?\\d{3}[\\- ]?\\d{4}")){
+            input = removeAcceptablePunctuation(input);
             output[0] = input.substring(0,3);
             output[1] = input.substring(3);
             return output;
         }
     
         /* Checks mobile numbers starting in 025 */
-        if(input.matches("\\(?025\\)?\\d{3}\\-?\\d{3}")){
-	    input = input.replaceAll("[()-]","");
+        if(input.matches("\\(?025\\)? ?\\d{3}[\\- ]?\\d{3}")){
+	    input = removeAcceptablePunctuation(input);
             output[PREFIX] = "027";
             output[SUFFIX] = "4" + input.substring(3);
             return output;
         }
         
         return INVALID_NUMBER;
+    }
+
+    public static String removeAcceptablePunctuation(String input){
+        String output = input.replaceAll("[()\\- ]","");
+        return output;
     }
         
 }

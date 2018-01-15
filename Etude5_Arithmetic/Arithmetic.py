@@ -5,6 +5,7 @@ import itertools
 from pprint import pprint
 
 from operator import add,mul
+
           
 class ArithmeticTreeNode:
 
@@ -61,3 +62,4 @@ class Arithmetic:
 
 if __name__  == '__main__':
     Arithmetic.main()
+    

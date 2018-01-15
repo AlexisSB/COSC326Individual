@@ -1,6 +1,5 @@
 telephone: Telephone.java
 	javac -Xlint Telephone.java -d .
-	java telephone.Telephone < numbers.txt
 
 test : Telephone.java valid_input valid_output invalid_input invalid_output
 	javac -Xlint Telephone.java -d .

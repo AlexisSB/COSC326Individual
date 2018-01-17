@@ -18,7 +18,10 @@ public class ArithmeticApp {
             String numberInput = scan.nextLine();
             long total = scan.nextLong();
             String resultsInput = scan.nextLine().trim();
+            char option = resultsInput.charAt(0);
+            System.err.println(option);
             String[] numbersString = numberInput.split(" ");
+            
             long[] numbersLong = new long[numbersString.length];
 
             for (int i = 0; i < numbersLong.length;i++){
@@ -28,11 +31,11 @@ public class ArithmeticApp {
             System.err.println(total + " " + resultsInput);
 
             Arithmetic solutionFinder = new Arithmetic(numbersLong,total);
-            System.out.println(solutionFinder.depthFirstSearch(resultsInput));
+            System.out.println(option + " " + solutionFinder.depthFirstSearch(option));
 
-            }
         }
-
-
-
     }
+
+
+
+}

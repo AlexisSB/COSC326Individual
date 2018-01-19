@@ -1,0 +1,46 @@
+package arithmetic;
+
+import java.util.*;
+
+public class ArithmeticApp{
+
+    long[] numbers;
+    Operation[] operations;
+    private static Option option;
+    long target;
+
+    public static void main(String[] args){
+
+    }
+
+    public static readInput(){
+        Scanner scan = new Scanner(System.in);
+
+        //Creates a long array of the input numbers
+        String numberInput = scan.nextLine();
+        String[] numbersString = numberInput.split(" ");
+        long[] numbersLong = new long[numbersString.length];
+        for (int i = 0; i < numbersLong.length;i++){
+            numbersLong[i] = Long.parseLong(numbersString[i]);
+        }
+        this.numbers = numbersLong;
+
+        
+        long total = scan.nextLong();
+        this.target = total;
+        
+        String optionInput = scan.nextLine().trim();
+        char optionChar = resultsInput.charAt(0);
+        if(optionChar == 'N'){
+            option = NORMAL;
+        } else if (optionChar =='L'){
+            option = LEFTTORIGHT;
+        }else{
+            System.err.println("Evaluation option not valid. Please check input");
+            System.exit(0);
+        }
+
+        System.err.println(option);
+        
+
+    }

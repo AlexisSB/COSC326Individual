@@ -46,15 +46,19 @@ public class ArithmeticApp{
         //Start search
         while (!myStack.isEmpty()){
             System.err.println("Stack: " + myStack);
+	    //Get Node of the stack
             Node currentNode = myStack.pop();
            
 
             long nodeValue = evaluateNode(currentNode);
             int depth = currentNode.getDepth();
-            if (nodeValue == target && depth == numbers.length-1){
+	    //Check to see if node is a valid solution.
+	    if (nodeValue == target && depth == numbers.length-1){
                 operations = currentNode.getOperations();
                 return true;
             }
+	    //Check if the node is an internal node that can be expanded.
+	    //Prune if node value is too big.
             if (nodeValue < target && depth < numbers.length-1){
 
                 //Create Add node
@@ -127,6 +131,8 @@ public class ArithmeticApp{
                 System.err.println("multiplyNode : " + multiplyNode);
 
 		//Normal Multiplication
+
+		
 
 		//Check Previous operation
 		

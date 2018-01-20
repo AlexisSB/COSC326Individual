@@ -6,14 +6,20 @@ public class Node{
 
     ArrayList<Long> pendingValue;
     Operation[] operations;
+    int depth;
 
     public Node(){
-        this(null,new ArrayList<Long>());
+        this(null,new ArrayList<Long>(),0);
     }
 
-    public Node (Operation[] operations, ArrayList<Long> pendingValue){
+    public Node (Operation[] operations, ArrayList<Long> pendingValue,int depth){
         this.pendingValue = pendingValue;
         this.operations = operations;
+	this.depth = depth;
+    }
+
+    public int getDepth(){
+	return this.depth;
     }
     
     public Operation[] getOperations(){

@@ -50,37 +50,87 @@ public class ArithmeticApp{
            
 
             long nodeValue = evaluateNode(currentNode);
-            int depth = myStack.size();
+            int depth = currentNode.getDepth();
             if (nodeValue == target && depth == numbers.length-1){
                 operations = currentNode.getOperations();
                 return true;
             }
             if (nodeValue < target && depth < numbers.length-1){
 
-                //Create Add node 
+                //Create Add node
+		Node addNode = new Node();
+		long tempValue = currentNode.getPendingValue().get(0);
                 Operation[] tempOperations = new Operation[numbers.length-1];        
                 for(int i = 0;i< tempOperations.length;i++){
                     tempOperations[i] = currentNode.getOperations()[i];
                 }
                 tempOperations[depth] = Operation.ADD;
+		System.err.println(Arrays.toString(tempOperations));
 
                 //LTR Addition
-                long tempValue = currentNode.getPendingValue().get(0);
-                tempList = new ArrayList<Long>();
-                System.err.println("\nTemp Value : " + tempValue);
-                System.err.println("Depth : " + depth);
-                tempList.add(tempValue + numbers[depth+1]);
-                Node addNode = new Node(tempOperations,tempList);
-                System.err.println("addNode " + addNode);
-                                
+
+		if (option == Option.LEFTTORIGHT){
+		   
+		    tempList = new ArrayList<Long>();
+		    System.err.println("\nTemp Value : " + tempValue);
+		    System.err.println("Depth : " + depth);
+		    tempList.add(tempValue + numbers[depth+1]);
+		    addNode = new Node(tempOperations,tempList,depth+1);
+		    System.err.println("addNode " + addNode);
+		    System.err.println("addNode " + Arrays.toString(addNode.getOperations()));
+
+		}else{
+		    //Normal Addition
+
+		    //Check previous and current operations.
+		    tempList = currentNode.getPendingValue();
+		    Operation currentOperation = Operation.ADD;
+		    Operation previousOperation;
+		    if (depth == 0){
+			//System.err.println("Set to none");
+			previousOperation = Operation.NONE;
+		    }else{
+			//System.err.println(Arrays.toString(currentNode.getOperations()));
+			previousOperation =currentNode.getOperations()[depth-1];
+		    }
+		    System.err.println("Current Operation : " + currentOperation);
+		    System.err.println("Previous operation : " + previousOperation);
+
+		    //New node action depends on previosu operation.
+		
+		    if (previousOperation == Operation.ADD){
+			tempList.add(numbers[depth]);
+			 addNode = new Node(tempOperations, tempList,depth+1);
+		    }else if(previousOperation == Operation.MULTIPLY){
+			tempList.add(numbers[depth]);
+			addNode = new Node(tempOperations,tempList,depth+1);
+		    }else if (previousOperation == Operation.NONE){
+			//Put first value in array list and second value in array list.
+			System.err.println("Previous Operation NONE");
+			tempList = new ArrayList<Long>();
+			tempList.add(new Long(numbers[0]));
+			tempList.add(new Long(numbers[1]));
+			addNode = new Node(tempOperations,tempList,depth+1);
+			System.err.println("addNode " + addNode);
+			System.err.println("addNode " + Arrays.toString(addNode.getOperations()));
+		    }
+		
+		}
+		
                 //Create Multiply Node
 
                 //LTR Multiplication
                 tempOperations[depth] = Operation.MULTIPLY;
                 tempList = new ArrayList<Long>();
                 tempList.add(tempValue * numbers[depth+1]);
-                Node multiplyNode = new Node(tempOperations, tempList);
+                Node multiplyNode = new Node(tempOperations, tempList,depth+1);
                 System.err.println("multiplyNode : " + multiplyNode);
+
+		//Normal Multiplication
+
+		//Check Previous operation
+		
+		
 
                 myStack.push(addNode);
                 myStack.push(multiplyNode);

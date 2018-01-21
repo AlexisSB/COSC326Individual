@@ -67,6 +67,7 @@ public class ArithmeticApp{
             Node currentNode = myStack.pop();
             //Create shared variables
             long nodeValue = evaluateNode(currentNode);
+	    System.out.println("Current Node : " + currentNode + "Node Value : " + nodeValue);
             int depth = currentNode.getDepth();
             
             ArrayList<Long> tempList = new ArrayList<Long>();
@@ -86,7 +87,7 @@ public class ArithmeticApp{
                 //Check if the node is an internal node that can be expanded.
                 //Prune if node value is too big.
                 //Shared Varialbles.
-                long currentPendingValue = currentNode.getPendingValue().get(0);
+                ArrayList<Long> currentNodeValues = currentNode.getPendingValue();
                 long nextNumber = numbers[depth+1];
                 //Create Add node
 		Node addNode = new Node();
@@ -122,50 +123,79 @@ public class ArithmeticApp{
 		    //tempList = currentNode.getPendingValue();
 		    Operation currentOperation = Operation.ADD;
 		    Operation previousOperation;
+		    Operation oneBeforeLastOperation;
 
                     if (depth == 0){
 			//System.err.println("Set to none");
 			previousOperation = Operation.NONE;
+			oneBeforeLastOperation = Operation.NONE;
+		    }else if (depth ==1){
+			previousOperation =currentNode.getOperations()[depth-1];
+			oneBeforeLastOperation = Operation.NONE;
 		    }else{
 			//System.err.println(Arrays.toString(currentNode.getOperations()));
-			previousOperation =currentNode.getOperations()[depth-1];
+			previousOperation = currentNode.getOperations()[depth-1];
+			oneBeforeLastOperation = currentNode.getOperations()[depth-2];
 		    }
 		    System.err.println("Current Operation : " + currentOperation);
 		    System.err.println("Previous operation : " + previousOperation);
-
+		    System.err.println("One before last operation: " + oneBeforeLastOperation);
+				       
 		    //New node action depends on previosu operation.
-
+		    
                     //Create multiply Node arraylist and copy values from current
                     /*
                     for(int i = 0;i< 2;i++){
-                        multiplyNodeValues.set(i, new Long(currentNode.getPendingValue.get(i)));
+		    multiplyNodeValues.set(i, new Long(currentNode.getPendingValue.get(i)));
                     }
                     */
-		    if (previousOperation == Operation.ADD){
-                        Long firstValue = currentNode.getPendingValue().get(0)
-                            + currentNode.getPendingValue().get(1);
-			addNodeValues.add(firstValue);
-                        addNodeValues.add(new Long(nextNumber));
-                    }else if(previousOperation == Operation.MULTIPLY){
-			addNodeValues.add(currentNode.getPendingValue().get(0));
-                        addNodeValues.add(new Long(nextNumber));
-                        
-		    }else if (previousOperation == Operation.NONE){
-			//Put first value in array list and second value in array list.
-			//System.err.println("Previous Operation NONE");
-			/*tempList = new ArrayList<Long>();
-			tempList.add(new Long(numbers[0]));
-			tempList.add(new Long(numbers[1]));
-			addNode = new Node(tempOperations,tempList,depth+1);
-                        */
-                        addNodeValues.add(currentNode.getPendingValue().get(0));
-                        addNodeValues.add(new Long(nextNumber));
 
-                        
+		    if(oneBeforeLastOperation == Operation.NONE){
+			if (previousOperation == Operation.ADD){
+			    Long newFirstValue = currentNodeValues.get(0) + currentNodeValues.get(1);
+			    addNodeValues.add(newFirstValue);
+			    addNodeValues.add(new Long(nextNumber));
+			}else if (previousOperation == Operation.MULTIPLY){
+			    Long newFirstValue = currentNodeValues.get(0);
+			    addNodeValues.add(newFirstValue);
+			    addNodeValues.add(new Long(nextNumber));
+			}else{
+			    //Root Node Case, both NONE
+			    addNodeValues.add(currentNodeValues.get(0));
+			    addNodeValues.add(new Long(nextNumber));
+			}
 		    }
-                    addNode.setPendingValue(addNodeValues);
-                    //System.err.println("addNode " + addNode);
-                    //System.err.println("addNode " + Arrays.toString(addNode.getOperations()));
+		
+		    if (oneBeforeLastOperation == Operation.ADD){	
+			if (previousOperation == Operation.ADD){
+			    Long newFirstValue = currentNodeValues.get(0)
+				+ currentNodeValues.get(1);
+			    addNodeValues.add(newFirstValue);
+			    addNodeValues.add(new Long(nextNumber));
+			}else if(previousOperation == Operation.MULTIPLY){
+			    Long newFirstValue = currentNodeValues.get(0)+ currentNodeValues.get(1);
+			    addNodeValues.add(newFirstValue);
+			    addNodeValues.add(new Long(nextNumber));
+                        }else{
+			    System.err.println("Missed NONE in case before last");
+			}
+		    }
+
+		    if(oneBeforeLastOperation == Operation.MULTIPLY){
+			if (previousOperation == Operation.ADD){
+			    Long newFirstValue = currentNodeValues.get(0)
+				+ currentNodeValues.get(1);
+			    addNodeValues.add(newFirstValue);
+			    addNodeValues.add(new Long(nextNumber));
+			}else if(previousOperation == Operation.MULTIPLY){
+			    Long newFirstValue = currentNodeValues.get(0);
+			    addNodeValues.add(newFirstValue);
+			    addNodeValues.add(new Long(nextNumber));
+                        }else{
+			    System.err.println("Missed NONE in case before last");
+			}
+		    }
+		    addNode.setPendingValue(addNodeValues);
 		}
                 
                 System.err.println("Add Node Value : " + addNodeValues);
@@ -198,26 +228,71 @@ public class ArithmeticApp{
                     
                     //Normal Multiplication
                     Operation currentOperation = Operation.MULTIPLY;
-                    Operation previousOperation;
+		    Operation previousOperation;
+		    Operation oneBeforeLastOperation;
+
                     if (depth == 0){
-                        //System.err.println("Set to none");
-                        previousOperation = Operation.NONE;
-                    }else{
-                        //System.err.println(Arrays.toString(currentNode.getOperations()));
-                        previousOperation =currentNode.getOperations()[depth-1];
-                    }
-                    
-                    if (previousOperation == Operation.ADD){
-                        long productValue = currentNode.getPendingValue().get(1)*nextNumber;
-                        System.err.println("Product Value: " + productValue);
-                        multiplyNodeValues.add(currentNode.getPendingValue().get(0)+productValue);
-                        System.err.println(multiplyNodeValues);
-                
-                    }else{                                   
-                        
-                        multiplyNodeValues.add(currentNode.getPendingValue().get(0)*nextNumber);
-                       
-                    }
+			//System.err.println("Set to none");
+			previousOperation = Operation.NONE;
+			oneBeforeLastOperation = Operation.NONE;
+		    }else if (depth ==1){
+			previousOperation =currentNode.getOperations()[depth-1];
+			oneBeforeLastOperation = Operation.NONE;
+		    }else{
+			//System.err.println(Arrays.toString(currentNode.getOperations()));
+			previousOperation = currentNode.getOperations()[depth-1];
+			oneBeforeLastOperation = currentNode.getOperations()[depth-2];
+		    }
+		    System.err.println("Current Operation : " + currentOperation);
+		    System.err.println("Previous operation : " + previousOperation);
+		    System.err.println("One before last operation: " + oneBeforeLastOperation);
+		    //End of checking operations
+
+		     if(oneBeforeLastOperation == Operation.NONE){
+			if (previousOperation == Operation.ADD){
+			    multiplyNodeValues.add(currentNodeValues.get(0));
+			    multiplyNodeValues.add(currentNodeValues.get(1)*nextNumber);
+			}else if (previousOperation == Operation.MULTIPLY){
+			    Long newFirstValue = currentNodeValues.get(0) * nextNumber;
+			    multiplyNodeValues.add(newFirstValue);
+			}else{
+			    //Root Node Case, both NONE
+			    multiplyNodeValues.add(currentNodeValues.get(0)*nextNumber);
+			}
+		    }
+		     
+		    if (oneBeforeLastOperation == Operation.ADD){	
+			if (previousOperation == Operation.ADD){
+			    Long newFirstValue = currentNodeValues.get(0);
+			    Long newSecondValue = currentNodeValues.get(1) *nextNumber;
+			    multiplyNodeValues.add(newFirstValue);
+			    multiplyNodeValues.add(newSecondValue);
+			}else if(previousOperation == Operation.MULTIPLY){
+			    Long newFirstValue = currentNodeValues.get(0);
+			    multiplyNodeValues.add(newFirstValue);
+			    multiplyNodeValues.add(currentNodeValues.get(1)*nextNumber);
+                        }else{
+			    System.err.println("Missed NONE in case before last");
+			}
+		    }
+		    
+		    if(oneBeforeLastOperation == Operation.MULTIPLY){
+			if (previousOperation == Operation.ADD){
+			    Long newFirstValue = currentNodeValues.get(0);
+			    Long newSecondValue = currentNodeValues.get(1)*nextNumber;
+			    multiplyNodeValues.add(newFirstValue);
+			    multiplyNodeValues.add(newSecondValue);
+			}else if(previousOperation == Operation.MULTIPLY){
+			    Long newFirstValue = currentNodeValues.get(0)*nextNumber;
+			    multiplyNodeValues.add(newFirstValue);
+
+                        }else{
+			    System.err.println("Missed NONE in case before last");
+			}
+
+			
+
+		    }
                     multiplyNode.setPendingValue(multiplyNodeValues);
                     
                 }

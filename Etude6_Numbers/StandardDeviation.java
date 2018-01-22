@@ -22,6 +22,11 @@ public class StandardDeviation{
 	double meanDouble = calculateDoubleMean();
 	double stdDevDouble = calculateDoubleStandardDeviation(meanDouble);
 	System.err.println(" Double Precision Mean Calculated : " + stdDevDouble);
+
+        float stdDevFloatNoMean = calculateFloatStandardDeviation();
+        System.err.println(" Single Precision Implicit Mean : " + stdDevFloatNoMean);
+        double stdDevDoubleNoMean = calculateDoubleStandardDeviation();
+        System.err.println(" Double Precision Implicit Mean : " + stdDevDoubleNoMean);
 	
 	
     }
@@ -76,11 +81,39 @@ public class StandardDeviation{
     }
     
     public static float calculateFloatStandardDeviation(){
-	return -1;
+        float sumOfASquared=0;
+        float sumOfA = 0;
+
+        for(int i =0;i<data.length;i++){
+            sumOfASquared += (float)(data[i]*data[i]);
+            sumOfA += data[i];
+        }
+
+        float topHalf = sumOfASquared - ((sumOfA*sumOfA)/data.length);
+        float termInsideSqrt = topHalf/data.length;
+
+        float stdDev = (float) Math.sqrt(termInsideSqrt);
+        
+	return stdDev;
     }
 
     public static double calculateDoubleStandardDeviation(){
-	return -1;
+        double sumOfASquared=0;
+        double sumOfA = 0;
+
+        for(int i =0;i<data.length;i++){
+            sumOfASquared += (double)(data[i]*data[i]);
+            sumOfA += data[i];
+        }
+
+        double topHalf = sumOfASquared - ((sumOfA*sumOfA)/data.length);
+        double termInsideSqrt = topHalf/data.length;
+
+        double stdDev = Math.sqrt(termInsideSqrt);
+        
+	return stdDev;
+
+       
     }
 
 }

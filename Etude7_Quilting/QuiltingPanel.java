@@ -33,7 +33,7 @@ public class QuiltingPanel extends JPanel{
     public QuiltingPanel (){
 
         //Read in input, create layers
-        while(scan.hasNextLine()){
+        while(scan.hasNextDouble()){
             double scale = scan.nextDouble();
             int red = scan.nextInt();
             int green = scan.nextInt();

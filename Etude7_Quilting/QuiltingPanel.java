@@ -12,16 +12,16 @@ import javax.swing.*;
  */
 public class QuiltingPanel extends JPanel{
 
-    private int frameSizeX = 1000;
-    private int frameSizeY = 1000;
+    private double frameSizeX = 1000;
+    private double frameSizeY = 1000;
     Color currentColor;
     Scanner scan = new Scanner(System.in);
     ArrayList<Layer> layers = new ArrayList<Layer>();
-    int startingSize = frameSizeX/3 ;
+    double startingSize = frameSizeX/3 ;
     
     public QuiltingPanel (){
 
-        setPreferredSize (new Dimension(frameSizeX,frameSizeY));
+        
         /*JFrame frame = new JFrame();
         frame.getContentPane().add(this);
         frame.pack();
@@ -36,8 +36,25 @@ public class QuiltingPanel extends JPanel{
             Layer newLayer = new Layer(scale,red,green,blue);
             layers.add(newLayer);
         }
-
         normaliseLayers();
+        double totalHeight = 0;
+        frameSizeX = getScreenHeight();
+        frameSizeY = getScreenHeight();
+        startingSize = (int) getScreenHeight()/4;
+        
+        for(Layer l : layers){
+            double layerHeight = l.scale *startingSize; 
+            totalHeight += layerHeight;
+        }
+        
+        startingSize = (startingSize *(frameSizeY/totalHeight));
+        setPreferredSize (new Dimension((int)frameSizeX,(int)frameSizeY));
+    }
+
+    public double getScreenHeight(){
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        return screenSize.getHeight();
+
     }
 
     public void normaliseLayers(){
@@ -61,11 +78,11 @@ public class QuiltingPanel extends JPanel{
         super.paintComponent(g);
         currentColor = new Color(0,0,255);
         
-        int startingSize = 100;
-        int startingX = (frameSizeX/2); // May need double?
-        int startingY = (frameSizeY/2) ; // May need double?
-        int previousX = startingX;
-        int previousY = startingY;
+        //int startingSize = 100;
+        double startingX = (frameSizeX/2); // May need double?
+        double startingY = (frameSizeY/2) ; // May need double?
+        double previousX = startingX;
+        double previousY = startingY;
         
         //drawTest(g);
         drawSquares(g,0,layers.get(0),startingX, startingY);
@@ -77,28 +94,28 @@ public class QuiltingPanel extends JPanel{
     }
         
 
-    public void drawSquares(Graphics g,int depth, Layer layer, int startX, int startY){
+    public void drawSquares(Graphics g,int depth, Layer layer, double startX, double startY){
         
         //System.err.println("Recursive Case");
         g.setColor(layer.color);
-        int layerSize = (int)(layer.scale * startingSize);
-        int x = startX - (layerSize/2);
-        int y = startY - (layerSize/2);
-        int topLeftX = x;
-        int topLeftY = y;
-        int topRightX = topLeftX + layerSize;
-        int topRightY = topLeftY;
-        int bottomLeftX = topLeftX;
-        int bottomLeftY = topLeftY + layerSize;
-        int bottomRightX = topLeftX + layerSize;
-        int bottomRightY = topRightY + layerSize;
+        double layerSize = (int)(layer.scale * startingSize);
+        double x = startX - (layerSize/2);
+        double y = startY - (layerSize/2);
+        double topLeftX = x;
+        double topLeftY = y;
+        double topRightX = topLeftX + layerSize;
+        double topRightY = topLeftY;
+        double bottomLeftX = topLeftX;
+        double bottomLeftY = topLeftY + layerSize;
+        double bottomRightX = topLeftX + layerSize;
+        double bottomRightY = topRightY + layerSize;
         //System.err.println(layer);
         System.err.println("LayerSize : " + layerSize);
         //System.err.println("X coor : " + x);
         //System.err.println("Y coor : " + y);
             
         //System.err.println("Drawing A Rectangle");
-        g.fillRect(x,y,layerSize,layerSize);
+        g.fillRect((int)x,(int)y,(int)layerSize,(int)layerSize);
 
         if (depth == layers.size()-1){
                 

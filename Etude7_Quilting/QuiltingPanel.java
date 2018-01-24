@@ -17,7 +17,9 @@ public class QuiltingPanel extends JPanel{
     Color currentColor;
     Scanner scan = new Scanner(System.in);
     ArrayList<Layer> layers = new ArrayList<Layer>();
-    int startingSize = frameSizeX/3 ;
+    ArrayList<Square> squaresToDraw = new ArrayList<Square>();
+    int startingSize = frameSizeX/5;
+    
     
     public QuiltingPanel (){
 
@@ -36,8 +38,12 @@ public class QuiltingPanel extends JPanel{
             Layer newLayer = new Layer(scale,red,green,blue);
             layers.add(newLayer);
         }
-
+	System.err.println("Layers : " +layers);
+	
         normaliseLayers();
+	createSquares();
+
+       
     }
 
     public void normaliseLayers(){
@@ -57,33 +63,48 @@ public class QuiltingPanel extends JPanel{
         }
     }
 
+
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         currentColor = new Color(0,0,255);
         
-        int startingSize = 100;
-        int startingX = (frameSizeX/2); // May need double?
-        int startingY = (frameSizeY/2) ; // May need double?
-        int previousX = startingX;
-        int previousY = startingY;
-        
         //drawTest(g);
-        drawSquares(g,0,layers.get(0),startingX, startingY);
+        int numberOfLayers = layers.size();
+
+	for(int i = 0; i < numberOfLayers; i++){
+	    for(Square s : squaresToDraw){
+		System.err.println("Square : " + s);
+		if (s.getDepth() == i){
+		    System.err.println("Printing Square: " + s);
+		    g.setColor(layers.get(i).getColor());
+		    System.err.println("Current Color :" + g.getColor());
+		    s.drawSquare(g);
+		}
+	    }
+	}
+	
+
     }
 
     public void drawTest(Graphics g){
         g.setColor(Color.RED);
         g.fillRect(100,100,100,100);
     }
-        
 
-    public void drawSquares(Graphics g,int depth, Layer layer, int startX, int startY){
+    public void createSquares(){
+	int startingX = (frameSizeX/2); // May need double?
+        int startingY = (frameSizeY/2) ; // May need double?
+		
+	createSquares(0,layers.get(0),startingX,startingY);
+    }
+
+    public void createSquares(int depth, Layer layer, int centreX, int centreY){
         
         //System.err.println("Recursive Case");
-        g.setColor(layer.color);
-        int layerSize = (int)(layer.scale * startingSize);
-        int x = startX - (layerSize/2);
-        int y = startY - (layerSize/2);
+        
+        int layerSize = (int)(layer.scale * this.startingSize);
+       int x = centreX - (layerSize/2);
+        int y = centreY - (layerSize/2);
         int topLeftX = x;
         int topLeftY = y;
         int topRightX = topLeftX + layerSize;
@@ -92,31 +113,69 @@ public class QuiltingPanel extends JPanel{
         int bottomLeftY = topLeftY + layerSize;
         int bottomRightX = topLeftX + layerSize;
         int bottomRightY = topRightY + layerSize;
-        //System.err.println(layer);
+        System.err.println(layer);
         System.err.println("LayerSize : " + layerSize);
-        //System.err.println("X coor : " + x);
-        //System.err.println("Y coor : " + y);
+        System.err.println("X coor : " + x);
+        System.err.println("Y coor : " + y);
             
-        //System.err.println("Drawing A Rectangle");
-        g.fillRect(x,y,layerSize,layerSize);
+        System.err.println("Creating a Square");
+	System.err.println( layer.getColor() + ", "+ depth +","+ x + "," + y + "," +layerSize);
+	Square thisSquare = new Square(layer.getColor(),depth,x,y,layerSize,layerSize);
+	squaresToDraw.add(thisSquare);
+        //g.fillRect(x,y,layerSize,layerSize);
 
         if (depth == layers.size()-1){
                 
             return;
         }else{
-            drawSquares(g,depth+1,layers.get(depth+1),topLeftX,topLeftY);
-            drawSquares(g,depth+1,layers.get(depth+1),topRightX, topRightY);
-            drawSquares(g,depth+1,layers.get(depth+1),bottomLeftX, bottomRightY);
-            drawSquares(g,depth+1,layers.get(depth+1),bottomRightX, bottomRightY);
+            createSquares(depth+1,layers.get(depth+1),topLeftX,topLeftY);
+            createSquares(depth+1,layers.get(depth+1),topRightX, topRightY);
+            createSquares(depth+1,layers.get(depth+1),bottomLeftX, bottomRightY);
+            createSquares(depth+1,layers.get(depth+1),bottomRightX, bottomRightY);
             
         }
     }
+
+    //add shpaes to an array of arrays instead of drawing them recursively.
   
 
+    private class Square{
+	private Color color;
+	private int depth;
+	private int x;
+	private int y;
+	private int height;
+	private int width;
+	
+	public Square(Color color,int depth, int x,int y, int height, int width){
+	    this.color = color;
+	    this.depth = depth;
+	    this.x = x;
+	    this.y = y;
+	    this.height = height;
+	    this.width = width;
 
+	}
+
+	public int getDepth(){
+	    return depth;
+	}
+
+	public void drawSquare(Graphics g){
+	    g.setColor(this.color);
+	    // g.fillRect(100,100,100,100);
+	    System.err.println( x + "," + y + "," +height + "," +width);
+	    g.fillRect(x,y,height,width);
+	}
+
+	public String toString(){
+	    return "Layer: " + depth +" "+ color + " Size : " + height + " X,Y = " + x + "," +y;
+	}
+
+    }
 
     private class Layer{
-
+	//private int depth;
         private double scale;
         private Color color;
         

@@ -10,26 +10,30 @@ import javax.swing.*;
  * COSC326 Etude 7 SS 2018
  * @author Alexis Barltrop
  */
+@SuppressWarnings("serial")
 public class QuiltingPanel extends JPanel{
 
-    private double frameSizeX = 1000;
-    private double frameSizeY = 1000;
-    Color currentColor;
-    Scanner scan = new Scanner(System.in);
-    ArrayList<Layer> layers = new ArrayList<Layer>();
-    ArrayList<Square> squaresToDraw = new ArrayList<Square>();
-    double startingSize = frameSizeX/3 ;
+    /* Size of JPanel to create*/
+    private double frameSizeX;
+    private double frameSizeY;
     
+    Scanner scan = new Scanner(System.in);
+    /*Holds information about each layer to draw*/
+    ArrayList<Layer> layers = new ArrayList<Layer>();
+    /* Holds information about each square that needs to be drawn*/
+    ArrayList<Square> squaresToDraw = new ArrayList<Square>();
+    /* A default starting size */
+    double startingSize = frameSizeX/3 ;
+
+    /** Constructor
+     * Reads in input from stdin.
+     * Normalises the scale of each layer
+     * Adjusts panel window size so that the picture will fit on the screen
+     */
     public QuiltingPanel (){
 
-        
-        /*JFrame frame = new JFrame();
-        frame.getContentPane().add(this);
-        frame.pack();
-        frame.setVisible(true);
-        */
+        //Read in input, create layers
         while(scan.hasNextLine()){
-            //Read in input
             double scale = scan.nextDouble();
             int red = scan.nextInt();
             int green = scan.nextInt();
@@ -40,28 +44,39 @@ public class QuiltingPanel extends JPanel{
 
         normaliseLayers();
         //System.err.println("Layers : " +layers);
+
+        //Adjust frame to fit screen
         double totalHeight = 0;
-        frameSizeX = getScreenHeight()*0.9;
-        frameSizeY = getScreenHeight()*0.9;
+        double frameScale = 0.9;
+        frameSizeX = getScreenHeight()*frameScale;
+        frameSizeY = getScreenHeight()*frameScale;
         startingSize = (int) frameSizeY/4;
         
         for(Layer l : layers){
-            double layerHeight = l.scale *startingSize; 
-            totalHeight += layerHeight;
+            totalHeight += l.scale;
         }
        
-        startingSize = (startingSize *(frameSizeY/totalHeight))*0.9;
+        startingSize = ((frameSizeY)*frameScale)/totalHeight;
+        
         setPreferredSize (new Dimension((int)frameSizeX,(int)frameSizeY));
+        //Start creating the scale
         createSquares();
-       
-      
     }
 
+    /**
+     * Gets the size of the current monitor screen.
+     * @return double size of screen
+     */
     public double getScreenHeight(){
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         return screenSize.getHeight();
     }
-   
+
+    /**
+     * Normalises the scale fo each layer.
+     * Picks the maximum scale. Divides all the other scales by the maximum.
+     * Adjusts the scale for each layer.
+     */
     public void normaliseLayers(){
 
         double max =0;
@@ -70,42 +85,43 @@ public class QuiltingPanel extends JPanel{
                 max = l.getScale();
             }
         }
-        System.err.println("Max scale : " + max );
+        //System.err.println("Max scale : " + max );
 
         for( Layer l : layers){
             double currentScale = l.getScale();
             l.setScale(currentScale/max);
-            System.err.println("New Scale " + l.getScale());
+            //System.err.println("New Scale " + l.getScale());
         }
     }
 
 
+    /** paintComponent Method Draws all shapes on panel.
+     * Draws the squares layer by layer.
+     * @param g - Graphics object to draw shapes on.
+     */
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        currentColor = new Color(0,0,255);
-  
+          
         //drawTest(g);
         int numberOfLayers = layers.size();
 
 	for(int i = 0; i < numberOfLayers; i++){
 	    for(Square s : squaresToDraw){
-		System.err.println("Square : " + s);
+		//System.err.println("Square : " + s);
 		if (s.getDepth() == i){
-		    System.err.println("Printing Square: " + s);
+		    //System.err.println("Printing Square: " + s);
 		    g.setColor(layers.get(i).getColor());
-		    System.err.println("Current Color :" + g.getColor());
+		    //System.err.println("Current Color :" + g.getColor());
 		    s.drawSquare(g);
 		}
 	    }
 	}
-	
     }
 
-    public void drawTest(Graphics g){
-        g.setColor(Color.RED);
-        g.fillRect(100,100,100,100);
-    }
-  
+    /**
+     * Recursive starter method for creating squares to draw.
+     * Sets starting layer size and then calls recursive method.
+     */
     public void createSquares(){
 	double startingX = frameSizeX/2; // May need double?
         double startingY = frameSizeY/2; // May need double?
@@ -113,10 +129,18 @@ public class QuiltingPanel extends JPanel{
 	createSquares(0,layers.get(0),startingX,startingY);
     }
 
+    /**
+     * Recursive method for creating squares.
+     * Calls itself four times to add a square at each corner.
+     * @param depth - the number of layers below the current one.
+     * @param layer - the current layer
+     * @param centreX - the x coordinate that marks the centre of the square
+     * @param centreY - the y coordinate that marks the centre of the square.
+     */
     public void createSquares(int depth, Layer layer, double centreX, double centreY){
         
         //System.err.println("Recursive Case");
-        double layerSize = (int)(layer.scale * startingSize);
+        double layerSize = layer.scale * startingSize;
         double x = centreX - (layerSize/2);
         double y = centreY - (layerSize/2);
         double topLeftX = x;
@@ -128,13 +152,13 @@ public class QuiltingPanel extends JPanel{
         double bottomRightX = topLeftX + layerSize;
         double bottomRightY = topRightY + layerSize;
         
-        System.err.println(layer);
-        System.err.println("LayerSize : " + layerSize);
-        System.err.println("X coor : " + x);
-        System.err.println("Y coor : " + y);
+        //System.err.println(layer);
+        //System.err.println("LayerSize : " + layerSize);
+        //System.err.println("X coor : " + x);
+        //System.err.println("Y coor : " + y);
             
-        System.err.println("Creating a Square");
-	System.err.println( layer.getColor() + ", "+ depth +","+ x + "," + y + "," +layerSize);
+        //System.err.println("Creating a Square");
+	//System.err.println( layer.getColor() + ", "+ depth +","+ x + "," + y + "," +layerSize);
 	Square thisSquare = new Square(layer.getColor(),depth,(int)x,(int)y,(int)layerSize,(int)layerSize);
 	squaresToDraw.add(thisSquare);
         //g.fillRect(x,y,layerSize,layerSize);
@@ -152,9 +176,9 @@ public class QuiltingPanel extends JPanel{
         }
     }
 
-    //add shpaes to an array of arrays instead of drawing them recursively.
-  
-
+    /**
+     * Square holds details of each square to draw.
+     */
     private class Square{
 	private Color color;
 	private int depth;
@@ -179,9 +203,7 @@ public class QuiltingPanel extends JPanel{
 
 	public void drawSquare(Graphics g){
 	    g.setColor(this.color);
-	    // g.fillRect(100,100,100,100);
-	    System.err.println( x + "," + y + "," +height + "," +width);
-	    g.fillRect(x,y,height,width);
+            g.fillRect(x,y,height,width);
 	}
 
 	public String toString(){
@@ -190,6 +212,9 @@ public class QuiltingPanel extends JPanel{
 
     }
 
+    /**
+     * Layer holds information about each layer to draw.
+     */
     private class Layer{
 	//private int depth;
         private double scale;

@@ -4,7 +4,6 @@ aabb
 aah
 aahs
 aaliis
-aani
 aardwolf
 aaron
 aaronite
@@ -7495,7 +7494,6 @@ atelocephalous
 atelomyelia
 atelopodia
 atelostomia
-aten
 aterian
 ateuchi
 athabasca
@@ -37869,12 +37867,10 @@ fixate
 fixatif
 fixation
 fixatives
-fixe
 fixedness
 fixes
 fixing
 fixity
-fixt
 fixture
 fixtures
 fizelyite
@@ -50812,7 +50808,6 @@ infusoria
 infusories
 infusorium
 ingaevones
-ingan
 ingannation
 ingather
 ingathering

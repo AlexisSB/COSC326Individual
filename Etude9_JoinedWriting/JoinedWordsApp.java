@@ -64,7 +64,10 @@ public class JoinedWordsApp{
             String lastWord = args[1];
             Node firstNode = findNode(firstWord, dictionary);
             Node lastNode = findNode(lastWord, dictionary);
-
+	    if( firstNode== null || lastNode == null){
+		System.err.println("Word cannot be found in dictionary");
+		System.exit(0);
+	    }
             //Singly Linked Search
             System.out.println(searchSingle(firstNode, lastNode));
             System.out.println("Search Single");
@@ -119,7 +122,7 @@ public class JoinedWordsApp{
             for(Map.Entry<Node,Integer>  n : node.forwards.entrySet()){
                 singleOutput.add(n.getKey());
                 //This line prints the current state of the search.
-                System.err.println(singleOutput);
+                //System.err.println(singleOutput);
                 boolean found = DLSSingle(n.getKey(),target,depth-1);
                 if(found){
                     return found;
@@ -197,9 +200,15 @@ public class JoinedWordsApp{
             //findForwards(node,dictionary);
             findDoublyLinkedForwards(node,dictionary);
             for(Map.Entry<Node,Integer>  n : node.forwards.entrySet()){
-                doubleOutput.add(n.getKey());
+		if(!(doubleOutput.contains(n.getKey()))){
+		    doubleOutput.add(n.getKey());
+		}else{
+		    return false;
+		}
+                
                 //This line prints the current state of the search.
                 //System.err.println(doubleOutput);
+                
                 boolean found = DLSDouble(n.getKey(),target,depth-1);
                 if(found){
                     return found;

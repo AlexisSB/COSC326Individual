@@ -5,7 +5,7 @@ joined_writing: $(OBJ)
 
 run100: $(OBJ) 100words.txt
 	make joined_writing
-	java joined_writing.JoinedWordsApp hobo read < 100words.txt
+	java joined_writing.JoinedWordsApp item oyer < 100words.txt
 
 run10000: $(OBJ) 10000wordssorted.txt
 	make joined_writing

@@ -4,7 +4,8 @@ import java.util.*;
 
 public class JoinedWordsApp{
 
-    public static ArrayList<Node> output = new ArrayList<Node>();
+    public static ArrayList<Node> singleOutput = new ArrayList<Node>();
+    public static ArrayList<Node> doubleOutput = new ArrayList<Node>();
     public static ArrayList<Node> dictionary = new ArrayList<Node>();
 
     public static void main(String[] args){
@@ -39,10 +40,15 @@ public class JoinedWordsApp{
             String lastWord = args[1];
             Node firstNode = findNode(firstWord, dictionary);
             Node lastNode = findNode(lastWord, dictionary);
-            System.err.println(searchSingle(firstNode, lastNode));
-            System.err.println(output);
-            System.err.println(searchDouble(firstNode,lastNode));
-            System.err.println(output);
+            
+            System.out.println(searchSingle(firstNode, lastNode));
+            System.out.println("Search Single");
+            System.out.println(singleOutput);
+            //output = new ArrayList<Node>();
+            
+            System.out.println(searchDouble(firstNode,lastNode));
+            System.out.println("Search Double");
+            System.out.println(doubleOutput);
         }
         /* 
         for (Node n: dictionary){
@@ -58,44 +64,9 @@ public class JoinedWordsApp{
 
     }
 
-    public static boolean searchDouble(Node root, Node target){
-        //ArrayList<Node> outputHolder = new ArrayList<Node>();
-        output.add(root);
-        for (int depth = 0 ; depth < dictionary.size()/10;depth++){
-            boolean found = DLSDouble(root,target,depth);
-            if(found){
-                return found;
-            }
-        }
-        return false;
-    }
-
-    public static boolean DLSDouble(Node node, Node target, int depth){
-        
-        if(depth == 0 && node.getWord().equals(target.getWord())){
-            return true;
-        }
-        if (depth > 0){
-            //findForwards(node,dictionary);
-            findDoublyLinkedForwards(node,dictionary);
-            for(Map.Entry<Node,Integer>  n : node.forwards.entrySet()){
-                output.add(n.getKey());
-                //This line prints the current state of the search.
-                //System.err.println(output);
-                boolean found = DLSDouble(n.getKey(),target,depth-1);
-                
-                if(found){
-                    return found;
-                }
-                output.remove(n.getKey());
-            }
-        }
-        return false;
-    }
-
     public static boolean searchSingle(Node root, Node target){
         //ArrayList<Node> outputHolder = new ArrayList<Node>();
-        output.add(root);
+        singleOutput.add(root);
         for (int depth = 0 ; depth < dictionary.size()/10;depth++){
             boolean found = DLSSingle(root,target,depth);
             if(found){
@@ -115,20 +86,57 @@ public class JoinedWordsApp{
             findSinglyLinkedForwards(node,dictionary);
             //findDoublyLinkedForwards(node,dictionary);
             for(Map.Entry<Node,Integer>  n : node.forwards.entrySet()){
-                output.add(n.getKey());
+                singleOutput.add(n.getKey());
                 //This line prints the current state of the search.
-                //System.err.println(output);
+                System.err.println(singleOutput);
                 boolean found = DLSSingle(n.getKey(),target,depth-1);
                 
                 if(found){
                     return found;
                 }
-                output.remove(n.getKey());
+                singleOutput.remove(n.getKey());
             }
         }
         return false;
     }
 
+
+    public static boolean searchDouble(Node root, Node target){
+        //ArrayList<Node> outputHolder = new ArrayList<Node>();
+        doubleOutput.add(root);
+        for (int depth = 0 ; depth < dictionary.size()/10;depth++){
+            boolean found = DLSDouble(root,target,depth);
+            if(found){
+                return found;
+            }
+        }
+        return false;
+    }
+
+    public static boolean DLSDouble(Node node, Node target, int depth){
+        
+        if(depth == 0 && node.getWord().equals(target.getWord())){
+            return true;
+        }
+        if (depth > 0){
+            //findForwards(node,dictionary);
+            findDoublyLinkedForwards(node,dictionary);
+            for(Map.Entry<Node,Integer>  n : node.forwards.entrySet()){
+                doubleOutput.add(n.getKey());
+                //This line prints the current state of the search.
+                System.err.println(doubleOutput);
+                boolean found = DLSDouble(n.getKey(),target,depth-1);
+                
+                if(found){
+                    return found;
+                }
+                doubleOutput.remove(n.getKey());
+            }
+        }
+        return false;
+    }
+
+   
     public static Node findNode(String word, ArrayList<Node> dictionary){
         for(Node n : dictionary){
             if(n.getWord().equals(word)){
@@ -141,6 +149,7 @@ public class JoinedWordsApp{
 
     public static void findSinglyLinkedForwards(Node node, ArrayList<Node> dictionary){
         String word = node.getWord();
+        node.forwards.clear();
         for(Node n : dictionary){
             String otherWord = n.getWord();
             if(!(word.equals(otherWord))){
@@ -152,16 +161,32 @@ public class JoinedWordsApp{
                                || word.substring(i).length() >= (int) Math.ceil(otherWord.length()/2.0)){
                                 //System.err.println("Check in double linked loop");
                                 node.addForwards(n,word.length()-i);
+                                System.err.println(node.forwards);
                             }
                         }
                     }
                 }
             }
+
         }
     }
 
+
+    /*
+    public static void findDoublyLinkedForwards(Node node, ArrayList<Node> dictionary){
+        if (!(node.forwards.isEmpty())){
+            System.err.println("Done");
+        }else{
+            findForwards(node, dictionary);
+        }
+            
+
+    }
+    */
+    
     public static void findDoublyLinkedForwards(Node node, ArrayList<Node> dictionary){
         String word = node.getWord();
+        node.forwards.clear();
         for(Node n : dictionary){
             String otherWord = n.getWord();
             if(!(word.equals(otherWord))){
@@ -173,6 +198,7 @@ public class JoinedWordsApp{
                                && word.substring(i).length() >= (int) Math.ceil(otherWord.length()/2.0)){
                                 //System.err.println("Check in double linked loop");
                                 node.addForwards(n,word.length()-i);
+                                System.err.println(node.forwards);
                             }
                         }
                     }
@@ -180,6 +206,7 @@ public class JoinedWordsApp{
             }
         }
     }
+    
     
     public static void findForwards(Node node, ArrayList<Node> dictionary){
         String word = node.getWord();
@@ -190,7 +217,8 @@ public class JoinedWordsApp{
                     if (word.substring(i)
                         .equals(otherWord.substring(0,word.length()-i))){
                         node.addForwards(n,word.length()-i);
-                        n.addBackwards(node, word.length()-i);
+                        //n.addBackwards(node, word.length()-i);
+                        System.err.println(node.forwards);
                     }
                 }
             }

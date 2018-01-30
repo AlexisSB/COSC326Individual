@@ -75,18 +75,24 @@ public class Combinations{
 
 	//End of reduction
 
-
-	//Final Multiplication
-
-	long output = topArray[0];
-	for( int i = 1; i <topArray.length;i++){
-	    output *= topArray[i];
-	}
-
-	System.out.println("Answer : " + output);
-
+	System.out.println("Answer : " + multiplyToAnswer(topArray));
     }
-
-     
+	//Final Multiplication
+    public static long multiplyToAnswer(long[] topArray){
+	try{
+	    long output = topArray[0];
+	    for( int i = 1; i <topArray.length;i++){
+		output = Math.multiplyExact(output,topArray[i]);
+	    }
+	
+	    
+	    return output;
+	}catch(ArithmeticException e){
+	    System.err.println("Long Overflow");
+	    System.err.println(e);
+	    System.exit(0);
+	    return 0;
+	}
+    }
 
 }

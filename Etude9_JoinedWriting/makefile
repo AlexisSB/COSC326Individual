@@ -15,6 +15,10 @@ run100000: $(OBJ) 100000words.txt
 	make joined_writing
 	java joined_writing.JoinedWordsApp slab randomish  < 100000words.txt
 
+stress : $(OBJ) 100000words.txt
+	make joined_writing
+	java joined_writing.JoinedWordsApp aaaa xxzz  < 100000words.txt
+
 test: $(OBJ) 100000words.txt
 	make joined_writing
 	java joined_writing.JoinedWordsApp suffix read  < 100000words.txt

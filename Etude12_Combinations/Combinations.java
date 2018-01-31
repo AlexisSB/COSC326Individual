@@ -117,6 +117,7 @@ public class Combinations{
             //System.err.println();
             
         }
+        return topArray;
     }
 
     /**
@@ -147,7 +148,7 @@ public class Combinations{
             System.err.println(Arrays.toString(bottomArray));
             
         }
-        
+        return bottomArray; 
     }
     
 }

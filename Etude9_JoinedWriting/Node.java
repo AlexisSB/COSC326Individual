@@ -6,6 +6,8 @@ public class Node{
     String word;
     HashMap<Node,Integer> forwards = new  HashMap<Node,Integer>();
     HashMap<Node,Integer> backwards = new HashMap<Node,Integer>();
+    Node previousNode;
+    boolean seen = false;
         
     public Node(String word){
         this.word = word;

@@ -69,15 +69,23 @@ public class JoinedWordsApp{
 		System.exit(0);
 	    }
             //Singly Linked Search
+
+	   
+	    /*
             System.out.println(searchSingle(firstNode, lastNode));
             System.out.println("Search Single");
             System.out.println(singleOutput);
 
             //Doubly Linked Search
-            System.out.println(searchDouble(firstNode,lastNode));
+	    */
+	    searchDoubleBreadthFirst(firstNode,lastNode);
+	    doubleOutput = followBreadthFirstPath(firstNode, lastNode);
+	   
+	    // System.out.println(searchDouble(firstNode,lastNode));
             System.out.println("Search Double");
             System.out.println(doubleOutput);
             
+	    
         }else{
             System.err.println("No arguments entered. Please give first and last word");
             System.exit(0);
@@ -163,7 +171,62 @@ public class JoinedWordsApp{
 
         }
     }
+    ///////////////////////////////////////////////////////
 
+
+    public static ArrayList<Node> followBreadthFirstPath(Node root, Node target){
+	ArrayList<Node> output = new ArrayList<Node>();
+	Node currentNode = target;
+	System.err.println("Generating output arraylist");
+	while (currentNode.previousNode != root){
+	    System.err.println("Adding " + currentNode.previousNode );
+	    output.add(0,currentNode.previousNode);
+	    currentNode = currentNode.previousNode;
+	}
+	
+	output.add(target);
+	return output;
+    }
+    
+    public static boolean searchDoubleBreadthFirst(Node root, Node target){
+	ArrayDeque<Node> queue = new ArrayDeque<Node>();
+	doubleOutput.add(root);
+	queue.add(root);
+	while (!(queue.isEmpty())){
+	    System.err.println(queue);
+	    //System.out.println(queue.size());
+	    Node currentNode = queue.remove();
+	    //System.err.println(currentNode);
+	    //Add node to output
+	    //Check if current node is goal
+	    if(currentNode.getWord().equals(target.getWord())){
+		System.out.println("Found target");
+		return true;
+	    }else{
+		//Explore the node.
+		//System.err.println("Exploring tree");
+		findDoublyLinkedForwards(currentNode, dictionary);
+		
+		//If the node hasn't been visited then add to queue
+		for(Map.Entry<Node,Integer>  n : currentNode.forwards.entrySet()){
+		    //if (n.getKey().previousNode == null){
+		    //System.err.println("Adding nodes to queue");
+		    if(!(n.getKey().seen)){
+			n.getKey().previousNode = currentNode;
+			n.getKey().seen = true;
+			queue.add(n.getKey());
+		    }
+		}
+	    }
+	    
+	}
+	return false;
+	
+
+    }
+
+    /////////////////////////////////////////////////////
+    
     /**
      * Recursive Method Start for doubly linked search.
      * Iterative Deepening Depth First Search.

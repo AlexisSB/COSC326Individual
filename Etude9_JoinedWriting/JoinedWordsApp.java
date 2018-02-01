@@ -164,6 +164,12 @@ public class JoinedWordsApp{
         }
     }
 
+    public static boolean searchDoubleBreadthFirst(Node root, Node target){
+        
+
+    }
+    
+
     /**
      * Recursive Method Start for doubly linked search.
      * Iterative Deepening Depth First Search.

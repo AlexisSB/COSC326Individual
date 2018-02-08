@@ -271,8 +271,8 @@ public class BreadthFirst{
 	output.append(currentNode.getWord());
 	currentNode = currentNode.previousNode;
 
-	while (currentNode.previousNode != null){
-	    output.append(" " +currentNode.getWord());
+	while (currentNode != null){
+	    output.insert(0,currentNode.getWord()+ " ");
 	    currentNode = currentNode.previousNode;
 	    count++;
 	}

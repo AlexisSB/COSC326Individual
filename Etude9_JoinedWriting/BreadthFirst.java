@@ -5,56 +5,68 @@ import java.util.*;
 public class BreadthFirst{
 
     public static ArrayList<Node> dictionary = new ArrayList<Node>();
-    public static ArrayList<Node> output = new ArrayList<Node>();
-    public static HashSet<String> initialWordList = new HashSet<String>();
     public static HashSet<String> wordList = new HashSet<String>();
+    private enum LinkOption {SINGLY_LINKED, DOUBLY_LINKED};
     
     public static void main (String[] args){
 	/* Read in dictionary*/
 	/* Convert to Nodes*/
 	readInDictionary();
 	/* Read in first and last words */
-	if(args.length>0){
-	    String firstWord = args[0];
-            String lastWord = args[1];
-            Node firstNode = findNode(firstWord, dictionary);
-            Node lastNode = findNode(lastWord, dictionary);
-	    /* Djikstra from the first word*/
-            
-            boolean singlyLinkedSearch =searchBFS(firstNode, lastNode,1); 
-            System.err.println(singlyLinkedSearch);
-            
-            /* When you find a node search the dictionary for its links*/
-            
-            if(singlyLinkedSearch){
-                System.out.println(followBreadthFirstPath(firstNode,lastNode));
-            }else{
-                System.out.println("Impossible");
-            }
-            System.out.println(wordList.size());
-            //Clean up
-            for(Node n : dictionary){
-                n.reset();
-                wordList.clear();
-            }
-            
-         
-            
-            boolean doublyLinkedSearch = searchBFS(firstNode,lastNode,2);
-            System.err.println(doublyLinkedSearch);
-            if(doublyLinkedSearch){
-                System.out.println(followBreadthFirstPath(firstNode,lastNode));
-            }else{
-                System.out.println("Impossible");
-            }
-            
-	    /* Until you find the last word*/
+	if(args.length != 2){
+	    System.err.println("Please enter start word and end word only");
+	    System.exit(0);
 	}
+	
+	String firstWord = args[0];
+	String lastWord = args[1];
+	Node firstNode = findNode(firstWord, dictionary);
+	Node lastNode = findNode(lastWord, dictionary);
+
+	/* Check the words are in the dictionary*/
+        if ( firstNode == null || lastNode == null){
+	    System.err.println("Cannot find words in dictionary");
+	    System.exit(0);
+	}
+	/* Start search for singly linked words*/
+	LinkOption linkType = LinkOption.SINGLY_LINKED;
+	boolean singlyLinkedSearch =searchBFS(firstNode, lastNode,linkType); 
+	System.err.println(singlyLinkedSearch);
+        
+	/* When you find a node search the dictionary for its links*/
+        
+	if(singlyLinkedSearch){
+	    System.out.println(followBreadthFirstPath(firstNode,lastNode));
+	}else{
+	    System.out.println("Impossible");
+	}
+	System.out.println(wordList.size());
+	
+	//Clean up
+	for(Node n : dictionary){
+	    n.reset();
+	    wordList.clear();
+	}
+        
+        
+        /* Doubly Linked Search*/
+	linkType = LinkOption.DOUBLY_LINKED;
+
+	boolean doublyLinkedSearch = searchBFS(firstNode,lastNode,linkType);
+	System.err.println(doublyLinkedSearch);
+	if(doublyLinkedSearch){
+	    System.out.println(followBreadthFirstPath(firstNode,lastNode));
+	}else{
+	    System.out.println("Impossible");
+	}
+        
+	/* Until you find the last word*/
     }
+    
 
    
        
-    public static boolean searchBFS(Node root, Node target, int linking){
+    public static boolean searchBFS(Node root, Node target, LinkOption linkType){
 	ArrayDeque<Node> queue = new ArrayDeque<Node>();
         root.previousNode = null;
         root.distance = 0;
@@ -70,10 +82,10 @@ public class BreadthFirst{
             //if(!(currentNode.seen)){
             // if(!(wordList.contains(currentNode.getWord()))){
             //wordList.add(currentNode.getWord());
-            if(linking ==1){
-                expandNode(currentNode, dictionary,1);
+            if(linkType == LinkOption.SINGLY_LINKED){
+                expandNode(currentNode, dictionary,LinkOption.SINGLY_LINKED);
             }else{
-                expandNode(currentNode, dictionary,2);
+                expandNode(currentNode, dictionary,LinkOption.DOUBLY_LINKED);
             }
             /*
             if(debugcount < 5){
@@ -168,7 +180,7 @@ public class BreadthFirst{
      * @param node - Node with word to find links from.
      * @param dictionary - dictionary of words to search through.
      */
-    public static void expandNode(Node node, ArrayList<Node> dictionary, int option){
+    public static void expandNode(Node node, ArrayList<Node> dictionary, LinkOption linkType){
         String word = node.getWord();
         //System.err.println(word);
         for (int i = 0; i < word.length(); i++){
@@ -186,14 +198,13 @@ public class BreadthFirst{
                     String prefix = checkWord.substring(0,suffix.length());
                     //System.err.println("Prefix " + (count -start)+ " " + prefix);
                     if (prefix.equals(suffix)){
-                        if (option ==1){
+                        if (linkType == LinkOption.SINGLY_LINKED){
                             if((checkWord.length()<=(suffix.length()*2))
                                || (word.length() <=(suffix.length()* 2))){
                                 node.addForwards(n,prefix.length());
                             }
                         }else{
-                                                                                   
-                            //System.err.println(checkWord.length()/suffix.length());
+			    //System.err.println(checkWord.length()/suffix.length());
                             //System.err.println(word.length()/suffix.length());
                             if((checkWord.length() <= suffix.length()*2)
                                && ((word.length()<=suffix.length()*2))){
@@ -212,14 +223,10 @@ public class BreadthFirst{
         }
     }
 
-    
-    
     public static void readInDictionary(){
 	Scanner scan = new Scanner(System.in);
 	while(scan.hasNextLine()){
 	    String nextWord = scan.nextLine();
-            //wordList.add(nextWord);
-            //initialWordList.add(nextWord);
 	    Node wordNode = new Node(nextWord);
 	    dictionary.add(wordNode);
 	}

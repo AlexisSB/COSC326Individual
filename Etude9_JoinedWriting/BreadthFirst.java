@@ -54,7 +54,10 @@ public class BreadthFirst{
         if(singlyLinkedSearch){
 	    System.out.println(generateOutputString(firstNode,lastNode));
 	}else{
+	    /* If not singly linked then there will be no doubly linked cases either*/
 	    System.out.println("0");
+	    System.out.println("0");
+	    System.exit(0);
 	}
 	
 	/* Clean up*/

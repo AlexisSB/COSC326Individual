@@ -24,26 +24,26 @@ public class HarmonicNumbers{
     }
 
     public static void printSinglePrecisionForward(int limit){
-        System.out.println((float)harmonicForward(limit,Precision.SINGLE));
-                
+        System.out.println("Single Forward: " +(float)harmonicForward(limit,Precision.SINGLE));
+
     }
 
     public static void printDoublePrecisionForward(int limit){
-        System.out.println((double)harmonicForward(limit,Precision.DOUBLE));
-                
+        System.out.println("Double Forward: " + (double)harmonicForward(limit,Precision.DOUBLE));
+
     }
 
     public static double harmonicForward(int limit, Precision p){
         if (p == Precision.SINGLE){
             float total = 0;
-            
+
             for(int i = 1; i <= limit; i++){
                 total += (1/(float)i);
             }
             return total;
         }else{
             double total = 0;
-            
+
             for(int i = 1; i <= limit; i++){
                 total += (1/(double)i);
             }
@@ -52,25 +52,25 @@ public class HarmonicNumbers{
     }
 
     public static void printSinglePrecisionBackwards(int limit){
-        System.out.println((float)harmonicBackward(limit,Precision.SINGLE));
-                
+        System.out.println("Single Backward: " + (float)harmonicBackward(limit,Precision.SINGLE));
+
     }
     public static void printDoublePrecisionBackwards(int limit){
-        System.out.println((double)harmonicBackward(limit,Precision.SINGLE));
-                
+        System.out.println("Double Backward: " + (double)harmonicBackward(limit,Precision.DOUBLE));
+
     }
 
     public static double harmonicBackward(int limit, Precision p){
         if (p == Precision.SINGLE){
             float total = 0;
-            
+
             for(int i = limit; i >0 ; i--){
                 total += (1/(float)i);
             }
             return total;
         }else{
             double total = 0;
-            
+
             for(int i = limit; i >0; i--){
                 total += (1/(double)i);
             }
@@ -78,7 +78,3 @@ public class HarmonicNumbers{
         }
     }
 }
-           
-           
-        
-    

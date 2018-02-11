@@ -15,43 +15,44 @@ public class Identity{
 
     public static void main (String[] args){
 
-        
-        double xD = 1.0;
-        double yD = Math.pow(10,20);
-        /*
-        double xD = 1.0;
-        double yD = 1.0*Math.pow(10,70);
 
-        double xD = 3.0;
-        double yD = 12347.0;
+        //double xD = 2.0;
+        //double yD = 1.0*Math.pow(10,8);
 
-        double xD = Math.pow(10,70);
-        double yD = 1.0;
+        //double xD = 1.0;
+        //double yD = 1.0*Math.pow(10,70);
 
-        double xD = 100000000000000000006.0;
-        double yD = 1.0;
+        //double xD = Math.pow(10,100);
+        //double yD = 3.0;
+
+        //double xD = Math.pow(10,70);
+        //double yD = 1.0;
 
         double xD = 1.0;
-        double yD = 100000000000000000006.0;
-        
-        double xD = 1.0;
-        double yD = Math.pow(10,20) +6.0;
-        
-                */
-        
+        double yD = Math.pow(10,10);
+        System.out.println(xD/yD);
+        System.out.println((xD/yD) - (xD*yD));
+        System.out.println(((xD/yD) - (xD*yD))*yD);
+        System.out.println((xD*yD*yD));
+        //double xD = 1.0;
+        //double yD = 100000000000000000006.0;
+
+        //double xD = 1.0;
+        //double yD = Math.pow(10,20) +6.0;
+
         float xF = (float) xD;
         float yF = (float) yD;
 
-        
+
         float identityF = ((xF/yF) - (xF*yF))*yF + (xF*yF*yF);
         System.out.println(identityF);
-        
-        
 
-        double identityD = ((xD/yD) - (xD*yD))*yD + xD*yD*yD;
+
+
+        double identityD = ((xD/yD) - (xD*yD))*yD + (xD*yD*yD);
         System.out.println(identityD);
-        
+
     }
-    
+
 
 }

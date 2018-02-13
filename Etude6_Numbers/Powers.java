@@ -7,7 +7,7 @@ import java.util.*;
  * COSC 326 SS 2018 Etude 6.
  * @author Alexis Barltrop
  */
-public class HarmonicNumbers{
+public class Powers{
 
     private enum Precision {SINGLE, DOUBLE}
 
@@ -38,14 +38,14 @@ public class HarmonicNumbers{
             float total = 0;
 
             for(long i = 1; i <= limit; i++){
-                total += (1/(float)i);
+                total += (1/(float)((i*(i+1))/2));
             }
             return total;
         }else{
             double total = 0;
 
             for(long i = 1; i <= limit; i++){
-                total += (1/(double)i);
+                total += (1/(double)((i*(i+1))/2));
             }
             return total;
         }
@@ -65,14 +65,14 @@ public class HarmonicNumbers{
             float total = 0;
 
             for(long i = limit; i >0 ; i--){
-                total += (1/(float)i);
+                total += (1/(float)((i*(i+1))/2));
             }
             return total;
         }else{
             double total = 0;
 
             for(long i = limit; i >0; i--){
-                total += (1/(double)i);
+                total += (1/(double)((i*(i+1))/2));
             }
             return total;
         }

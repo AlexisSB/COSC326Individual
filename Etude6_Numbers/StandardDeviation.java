@@ -4,42 +4,50 @@ import java.util.*;
 
 public class StandardDeviation{
 
-    public static int[] inputData;
+    public static long[] inputData;
     
     public static void main (String[] args){
 	Scanner scan = new Scanner(System.in);
-	int population = 1000000;
+	int population = 0;
 	float meanSinglePrecision;
 	double meanDoublePrecision;
-	inputData = new int[population];
-	for (int i = 0; i<population;i++){
-	    inputData[i] = scan.nextInt();
-            inputData[i] += 1;
+	ArrayList<Long> input = new ArrayList<Long>();
+        
+        while(scan.hasNextLong()){
+            //System.err.println(scan.nextLong());
+            input.add(scan.nextLong());
+            population++;
 	}
         
+        inputData = new long[population];
+        for(int i=0; i < population;i++){
+            inputData[i] = input.get(i).longValue();
+        }
 	//System.err.println(Arrays.toString(data));
 
         for (int popSize = 100; popSize <=population; popSize *=10){
-            int[] instanceData = Arrays.copyOfRange(inputData, 0,popSize +1);
+            System.err.println("\n" + popSize);
+            long[] instanceData = Arrays.copyOfRange(inputData, 0,popSize +1);
             float meanFloat = calculateFloatMean(instanceData);
             double meanDouble = calculateDoubleMean(instanceData);
             float stdDevFloat = calculateFloatStandardDeviation(meanFloat,instanceData);
-            System.err.println("Single Precision StdDev with Mean : " + stdDevFloat);
+            
+            //System.err.println("Single Precision StdDev with Mean : " + stdDevFloat);
             
             double stdDevDouble = calculateDoubleStandardDeviation(meanDouble, instanceData);
-            System.err.println("Double Precision StdDev with Mean : " + stdDevDouble);
+            //System.err.println("Double Precision StdDev with Mean : " + stdDevDouble);
             
             float stdDevFloatNoMean = calculateFloatStandardDeviation(instanceData);
-            System.err.println("Single Precision StdDev No Mean : " + stdDevFloatNoMean);
+            //System.err.println("Single Precision StdDev No Mean : " + stdDevFloatNoMean);
             double stdDevDoubleNoMean = calculateDoubleStandardDeviation(instanceData);
-            System.err.println("Double Precision StdDev No Mean : " + stdDevDoubleNoMean);
+            //System.err.println("Double Precision StdDev No Mean : " + stdDevDoubleNoMean);
             System.out.println(popSize + "," + stdDevFloat+","+ stdDevDouble
                                +","+ stdDevFloatNoMean + "," + stdDevDoubleNoMean);
 	}
 	
     }
 
-    public static float calculateFloatMean(int[] data){
+    public static float calculateFloatMean(long[] data){
 	float sum = 0;
 	for(int i = 0; i <data.length;i++){
 	    sum += data[i];
@@ -49,7 +57,7 @@ public class StandardDeviation{
 	return mean;
     }
 
-    public static double calculateDoubleMean(int[] data){
+    public static double calculateDoubleMean(long[] data){
 	double sum = 0;
 	for(int i = 0; i <data.length;i++){
 	    sum += data[i];
@@ -59,7 +67,7 @@ public class StandardDeviation{
 	return mean;
     }
 
-    public static float calculateFloatStandardDeviation(float mean, int[] data){
+    public static float calculateFloatStandardDeviation(float mean, long[] data){
 	float sum = 0;
 	for(int i=0;i<data.length;i++){
 	    //Using times operator to avoid using Math libraries that use double precision.
@@ -74,7 +82,7 @@ public class StandardDeviation{
 	
     }
 
-    public static double calculateDoubleStandardDeviation(double mean, int[] data){
+    public static double calculateDoubleStandardDeviation(double mean, long[] data){
 	double sum = 0;
 	for(int i=0;i<data.length;i++){
 	    //Using times operator to avoid using Math libraries that use double precision.
@@ -88,7 +96,7 @@ public class StandardDeviation{
 	return stdDeviation;
     }
     
-    public static float calculateFloatStandardDeviation(int[] data){
+    public static float calculateFloatStandardDeviation(long[] data){
         float sumOfASquared=0;
         float sumOfA = 0;
 
@@ -105,7 +113,7 @@ public class StandardDeviation{
 	return stdDev;
     }
 
-    public static double calculateDoubleStandardDeviation(int[]data){
+    public static double calculateDoubleStandardDeviation(long[]data){
         double sumOfASquared=0;
         double sumOfA = 0;
 
